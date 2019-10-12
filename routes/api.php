@@ -40,3 +40,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('closed', 'DataController@closed');
 });
 
+Route::group(['middleware' => ['jwt.verify','domain.verify']], function() {
+    Route::get('domains/{url}/auth','DomainController@domainAuth');
+});
+

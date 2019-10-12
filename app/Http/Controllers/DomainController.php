@@ -40,13 +40,10 @@ class DomainController extends Controller
      */
     public function store(DomainStoreRequest $request)
     {
-        return Domain::create([
-            'url'=>$request->name,
-            'user_id'=>Auth::id(),
-            'status'=>0,
-            'hash_key'=>str_random(32)
-        ]);
-
+        $data = $this->domainRepository->save($request);
+        return response()->json([
+            'status'=>'Successfully stored.'
+        ],200);
     }
 
     public function domainAuth($domain){

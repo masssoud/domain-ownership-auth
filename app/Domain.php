@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Domain extends Model
 {
-    protected $fillable=['name','status','user_id','hash_key'];
+    protected $fillable=['url','status','user_id','hash_key'];
     const DOMAIN_VERIFY_PREFIX= 'domain-owner-ship';
 
 //    const

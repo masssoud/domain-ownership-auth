@@ -53,6 +53,16 @@ class DomainRepository implements DomainRepositoryInterface
      */
     public function getUserItemByDomain($domain, $user)
     {
-       return $this->domain->select('hash_key')->where('user_id',$user)->where('url',$domain)->first();
+       return $this->domain->where('user_id',$user)->where('url',$domain)->first();
+    }
+
+    public function save($attr)
+    {
+       return Domain::create([
+            'url'=>$attr->url,
+            'user_id'=>Auth::id(),
+            'status'=>0,
+            'hash_key'=>Domain::DOMAIN_VERIFY_PREFIX.'='.str_random(32)
+        ]);
     }
 }
