@@ -10,6 +10,7 @@ namespace App\Services;
 
 
 use App\Domain;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class DomainAuthService
@@ -28,7 +29,7 @@ class DomainAuthService
                     $data = explode("=", $text);
                     if (isset($data)) {
                         if ($data[0] == Domain::DOMAIN_VERIFY_PREFIX) {
-                            $user_token = $domain = Domain::select('hash_key')->where('user_id', request()->user_id)->first();
+                            $user_token = $domain = Domain::select('hash_key')->where('user_id',Auth::id())->first();
                             if ($data[1] == $user_token->hash_key) {
                                 $token = $data[1];
                                 break;
