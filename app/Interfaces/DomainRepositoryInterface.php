@@ -11,6 +11,7 @@ namespace App\Interfaces;
 
 interface DomainRepositoryInterface
 {
+    public function save($attr);
     public function getAllItems();
     public function getItem($id);
     public function getUserItemByDomain($domain,$user);
