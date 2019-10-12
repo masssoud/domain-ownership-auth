@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domain;
 use App\Http\Requests\DomainStoreRequest;
+use App\Http\Resources\DomainResource;
 use App\Interfaces\DomainRepositoryInterface;
 use App\Services\DomainAuthService;
 use Illuminate\Http\Request;
@@ -25,11 +26,12 @@ class DomainController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return DomainResource
      */
     public function index()
     {
-        return $this->domainRepository->getAllItems();
+        $user_domains = $this->domainRepository->getAllItems();
+        return new DomainResource($user_domains);
     }
 
     /**
@@ -41,9 +43,8 @@ class DomainController extends Controller
     public function store(DomainStoreRequest $request)
     {
         $data = $this->domainRepository->save($request);
-        return response()->json([
-            'status'=>'Successfully stored.'
-        ],200);
+        return new DomainResource($data);
+
     }
 
     public function domainAuth($domain){
