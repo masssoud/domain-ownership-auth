@@ -11,6 +11,7 @@ namespace App\Repositories;
 
 use App\Domain;
 use App\Interfaces\DomainRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 
 class DomainRepository implements DomainRepositoryInterface
 {
@@ -60,7 +61,7 @@ class DomainRepository implements DomainRepositoryInterface
 
     public function getAllItems()
     {
-        return $this->domain->where('user_id',request()->user_id)->paginate(1);
+        return $this->domain->where('user_id',Auth::id())->paginate(1);
     }
 
     public function getItem($id)

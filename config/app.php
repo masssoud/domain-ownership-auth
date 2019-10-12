@@ -179,6 +179,7 @@ return [
 
 
         App\Providers\DomainServiceProvider::class,
+        App\Providers\UserServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
 
