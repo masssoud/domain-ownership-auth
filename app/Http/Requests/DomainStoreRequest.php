@@ -27,7 +27,7 @@ class DomainStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>['required',new DuplicateUrl()]
+            'url'=>['required',new DuplicateUrl()]
         ];
     }
 

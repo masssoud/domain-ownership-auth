@@ -62,7 +62,7 @@ class DomainAuthService
                 $message = 'Successfully authorized.';
             } else {
                 $status = Response::HTTP_NOT_FOUND;
-                $message = 'Token not founded.';
+                $message = 'We couldn\'t find your verification token in your domain\'s TXT records.';
             }
             return response()->json([
                 'message' => $message,
