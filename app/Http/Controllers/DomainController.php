@@ -7,6 +7,7 @@ use App\Http\Requests\DomainStoreRequest;
 use App\Interfaces\DomainRepositoryInterface;
 use App\Services\DomainAuthService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DomainController extends Controller
 {
@@ -41,7 +42,7 @@ class DomainController extends Controller
     {
         Domain::create([
             'name'=>$request->name,
-            'user_id'=>$request->user_id,
+            'user_id'=>Auth::id(),
             'status'=>0,
             'hash_key'=>str_random(32)
         ]);

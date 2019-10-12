@@ -6,7 +6,7 @@
  * Time: 3:12 AM
  */
 
-namespace App\Http\Repositories;
+namespace App\Repositories;
 
 
 use App\Interfaces\UserRepositoryInterface;
