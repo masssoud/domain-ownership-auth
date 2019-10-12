@@ -13,4 +13,5 @@ interface DomainRepositoryInterface
 {
     public function getAllItems();
     public function getItem($id);
+    public function getUserItemByDomain($domain,$user);
 }

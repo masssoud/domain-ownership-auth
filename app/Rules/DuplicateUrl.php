@@ -4,6 +4,7 @@ namespace App\Rules;
 
 use App\Domain;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class DuplicateUrl implements Rule
 {
@@ -26,9 +27,9 @@ class DuplicateUrl implements Rule
      */
     public function passes($attribute, $value)
     {
-        $published_domain = Domain::where('name',$value)->where('status',1)->first();
-        $duplicate_domain = Domain::where('name',$value)->where('user_id',request()->user_id)->first();
-        if (is_null($published_domain) && is_null($duplicate_domain)){
+        $published_domain = Domain::where('url',$value)->where('status',1)->first();
+        $duplicate_domain = Domain::where('url',$value)->where('user_id',Auth::id())->first();
+        if ((is_null($published_domain)) && (is_null($duplicate_domain))){
             return true;
         }
         else{

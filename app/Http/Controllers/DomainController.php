@@ -36,12 +36,12 @@ class DomainController extends Controller
      * Store a newly created resource in storage.
      *
      * @param DomainStoreRequest $request
-     * @return void
+     * @return
      */
     public function store(DomainStoreRequest $request)
     {
-        Domain::create([
-            'name'=>$request->name,
+        return Domain::create([
+            'url'=>$request->name,
             'user_id'=>Auth::id(),
             'status'=>0,
             'hash_key'=>str_random(32)
@@ -50,6 +50,6 @@ class DomainController extends Controller
     }
 
     public function domainAuth($domain){
-        return $data = (new DomainAuthService())->checkAuth($domain);
+        return $data = (new DomainAuthService($this->domainRepository))->checkAuth($domain);
     }
 }
