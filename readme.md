@@ -1,15 +1,17 @@
 
-#Simple Domain Ownership Verification
+# Simple Domain Ownership Verification
+
 Simple laravel project uses php functionality for authenticate users domains that registered in system.
 Project needs php>=5.6.4 and we use version 5.5 and above versions of laravel.we use jwt for authenticating users.the package used is `tymon/jwt-auth`
-##Installation
+## Installation
+
 Simply clone project and install requirements via:
 ```
 composer install
 ```
 
 
-##Getting start
+## Getting start
 At first you should register via url:
 >api/register
 
