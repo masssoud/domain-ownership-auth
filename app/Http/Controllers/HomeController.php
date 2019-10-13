@@ -37,8 +37,10 @@ class HomeController extends Controller
 
     public function test(){
 
-
-dd('fsadasf');
+//        $domain= 'newscap.ir';
+//        $result = dns_get_record($domain, DNS_TXT);
+//
+//dd('fsadasf',$result);
 //
 //// Listing the contact information in case a new account has to be created.
 //        $email = array('info@example.org');

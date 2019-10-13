@@ -10,6 +10,10 @@ Simply clone project and install requirements via:
 composer install
 ```
 
+Create DB tables with artisan command:
+```
+php artisan migrate
+```
 
 ## Getting start
 At first you should register via url:

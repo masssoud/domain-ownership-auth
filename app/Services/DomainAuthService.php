@@ -11,7 +11,6 @@ namespace App\Services;
 
 use App\Domain;
 use App\Interfaces\DomainRepositoryInterface;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -37,15 +36,15 @@ class DomainAuthService
     {
         try {
             $result = dns_get_record($domain, DNS_TXT);
+            $user_token =  $this->domainRepository->getUserItemByDomain($domain,Auth::id());
             foreach ($result as $item) {
                 if (isset($item['txt'])) {
                     $text = $item['txt'];
                     $data = explode("=", $text);
                     if (isset($data)) {
                         if ($data[0] == Domain::DOMAIN_VERIFY_PREFIX) {
-                            $user_token = $domain = $this->domainRepository->getUserItemByDomain($domain,Auth::id());
-                            if ($data[1] == $user_token->hash_key) {
-                                $token = $data[1];
+                            if ($text == $user_token->hash_key) {
+                                $token = $text;
                                 break;
                             }
                         }
@@ -53,7 +52,7 @@ class DomainAuthService
                 }
             }
             if (isset($token)) {
-                Domain::where('name', $domain)
+                Domain::where('url', $domain)
                     ->where('hash_key', $token)
                     ->update([
                         'status' => 1

@@ -58,11 +58,13 @@ class DomainRepository implements DomainRepositoryInterface
 
     public function save($attr)
     {
-       return Domain::create([
+       $domain = Domain::create([
             'url'=>$attr->url,
             'user_id'=>Auth::id(),
             'status'=>0,
             'hash_key'=>Domain::DOMAIN_VERIFY_PREFIX.'='.str_random(32)
         ]);
+
+       return $this->domain->where('id',$domain->id)->get();
     }
 }
