@@ -10,6 +10,7 @@ namespace App\Services;
 
 
 use App\Domain;
+use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Interfaces\DomainRepositoryInterface;
 use App\Interfaces\UserDataTransformer;
@@ -18,9 +19,10 @@ use http\Client\Request;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class UserSignUpService
+class UserLoginService
 {
     private $userRepository;
     private $dataTransformer;
@@ -38,16 +40,21 @@ class UserSignUpService
 
 
     /**
-     * @param UserStoreRequest $request
-     * @return UserSignUpService
+     * @param UserLoginRequest $request
+     * @return UserLoginService
      */
-    public function execute(UserStoreRequest $request)
+    public function execute(UserLoginRequest $request)
     {
-        $user = $this->userRepository->create($request);
+        $credentials = $request->only('email', 'password');
 
-        $token = JWTAuth::fromUser($user);
-
-        $this->dataTransformer->write($user,$token);
+        try {
+            if (! $token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'invalid_credentials'], 400);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'could_not_create_token'], 500);
+        }
+        $this->dataTransformer->setToken($token);
 
         return $this;
     }

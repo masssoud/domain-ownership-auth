@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\JsonUserDataTransformer;
+use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Interfaces\UserRepositoryInterface;
+use App\Services\UserLoginService;
 use App\Services\UserSignUpService;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -22,48 +22,18 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function authenticate(Request $request)
+    public function authenticate(UserLoginRequest $request)
     {
-        $credentials = $request->only('email', 'password');
-
-        try {
-            if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 400);
-            }
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'could_not_create_token'], 500);
-        }
-
+        $user_object = (new UserLoginService($this->userRepository,new JsonUserDataTransformer()))->execute($request);
+        $token = $user_object->userDataTransformer()->getToken();
         return response()->json(compact('token'));
     }
 
     public function register(UserStoreRequest $request)
     {
-        $user = (new UserSignUpService($this->userRepository))->execute($request);
-
-        return $user;
-    }
-
-    public function getAuthenticatedUser()
-    {
-        try {
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['user_not_found'], 404);
-            }
-
-        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-
-            return response()->json(['token_expired'], $e->getStatusCode());
-
-        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-
-            return response()->json(['token_invalid'], $e->getStatusCode());
-
-        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
-
-            return response()->json(['token_absent'], $e->getStatusCode());
-
-        }
-        return response()->json(compact('user'));
+        $user_object = (new UserSignUpService($this->userRepository,new JsonUserDataTransformer()))->execute($request);
+        $data = $user_object->userDataTransformer()->read();
+        $token = $user_object->userDataTransformer()->getToken();
+        return response()->json(compact('data','token'),Response::HTTP_CREATED);
     }
 }
