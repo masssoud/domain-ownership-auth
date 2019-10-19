@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\DuplicateUrl;
+use App\Rules\UniqueUrl;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -27,7 +28,7 @@ class DomainStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'url'=>['required',new DuplicateUrl()]
+            'url'=>['required',new DuplicateUrl(),'url']
         ];
     }
 
