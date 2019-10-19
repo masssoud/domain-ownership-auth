@@ -7,6 +7,7 @@ use App\Http\Requests\DomainStoreRequest;
 use App\Http\Resources\DomainResource;
 use App\Interfaces\DomainRepositoryInterface;
 use App\Services\DomainAuthService;
+use App\Services\DomainStoreService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,7 +43,7 @@ class DomainController extends Controller
      */
     public function store(DomainStoreRequest $request)
     {
-        $data = $this->domainRepository->save($request);
+        $data = (new DomainStoreService($this->domainRepository))->execute($request);
         return new DomainResource($data);
 
     }

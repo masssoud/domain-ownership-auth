@@ -58,7 +58,7 @@ class DomainRepository implements DomainRepositoryInterface
 
     public function save($attr)
     {
-       $domain = Domain::create([
+        $domain = Domain::create([
             'url'=>$attr->url,
             'user_id'=>Auth::id(),
             'status'=>0,
