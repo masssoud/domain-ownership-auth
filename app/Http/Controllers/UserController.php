@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserStoreRequest;
 use App\Interfaces\UserRepositoryInterface;
+use App\Services\UserSignUpService;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
     private $userRepository;
-
-
     /**
      * UserController constructor.
      * @param UserRepositoryInterface $userRepository
@@ -39,11 +39,9 @@ class UserController extends Controller
 
     public function register(UserStoreRequest $request)
     {
-        $user = $this->userRepository->create($request);
+        $user = (new UserSignUpService($this->userRepository))->execute($request);
 
-        $token = JWTAuth::fromUser($user);
-
-        return response()->json(compact('user','token'),201);
+        return $user;
     }
 
     public function getAuthenticatedUser()
