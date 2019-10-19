@@ -22,18 +22,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
+Route::resource('users','UserController');
 
 
 //Route::post('domains','UserController@crateDomain');
 
 //jwt routes
-Route::resource('users','UserController');
 
 Route::post('register', 'UserController@register');
 Route::post('login', 'UserController@authenticate');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::resource('domains','DomainController');
+//    Route::post('domains/{domain}/auth','DomainController@domainAuth');
+//    Route::get('user', 'UserController@getAuthenticatedUser');
+//    Route::get('closed', 'DataController@closed');
 });
 
 Route::group(['middleware' => ['jwt.verify','domain.verify']], function() {
